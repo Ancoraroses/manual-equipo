@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuaderno de Bitácora — L'Àncora</title>
+<meta name="description" content="Manual del equipo de L'Àncora, Roses. Guía de trabajo, convivencia y sostenibilidad.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚓%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --navy:#1c3454;
+    --navy-deep:#122238;
+    --navy-panel:#16283f;
+    --gold:#c8963e;
+    --gold-soft:#e0bd7c;
+    --cream:#f6f1e4;
+    --cream-deep:#eee3c8;
+    --ink:#20303f;
+    --ink-soft:#4c5c6c;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: Helvetica, Arial, sans-serif;
+    --rule: rgba(28,52,84,0.16);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+
+  /* ---------- layout shell ---------- */
+  .shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media (max-width:900px){ .shell{grid-template-columns:1fr;} }
+
+  /* ---------- sidebar / nav ---------- */
+  .nav{
+    background:var(--navy-panel);
+    color:var(--cream-deep);
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    padding:28px 0 40px;
+    border-right:1px solid rgba(200,150,62,0.25);
+  }
+  @media (max-width:900px){
+    .nav{position:relative;height:auto;display:none;}
+    .nav.open{display:block;}
+  }
+  .nav-brand{
+    display:flex;align-items:center;gap:12px;
+    padding:0 24px 22px;
+    border-bottom:1px solid rgba(200,150,62,0.22);
+    margin-bottom:14px;
+  }
+  .nav-anchor{width:26px;height:26px;flex:none;}
+  .nav-brand-text{font-family:var(--sans);}
+  .nav-brand-text .top{display:block;font-size:10px;letter-spacing:.14em;color:var(--gold-soft);}
+  .nav-brand-text .main{display:block;font-family:var(--serif);font-size:19px;color:var(--cream);}
+  .nav ol{list-style:none;margin:0;padding:0;counter-reset:entry;}
+  .nav li{counter-increment:entry;}
+  .nav a{
+    display:flex;gap:10px;align-items:baseline;
+    font-family:var(--sans);
+    font-size:13.5px;
+    padding:9px 24px;
+    text-decoration:none;
+    color:rgba(246,241,228,0.72);
+    border-left:3px solid transparent;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .nav a::before{
+    content:counter(entry, decimal-leading-zero);
+    color:var(--gold);
+    font-family:var(--serif);
+    font-size:12px;
+    opacity:.85;
+  }
+  .nav a:hover{background:rgba(200,150,62,0.08); color:var(--cream);}
+  .nav a.active{
+    color:var(--cream);
+    border-left-color:var(--gold);
+    background:rgba(200,150,62,0.12);
+  }
+  .nav .annex-label{
+    font-family:var(--sans);
+    font-size:10px;letter-spacing:.14em;
+    color:rgba(246,241,228,0.45);
+    padding:18px 24px 6px;
+  }
+
+  .nav-toggle{
+    display:none;
+    position:sticky; top:0; z-index:20;
+    background:var(--navy-panel); color:var(--cream);
+    font-family:var(--sans); font-size:13px;
+    padding:14px 20px; border:none; width:100%;
+    text-align:left; cursor:pointer;
+    border-bottom:1px solid rgba(200,150,62,0.25);
+  }
+  @media (max-width:900px){ .nav-toggle{display:flex; align-items:center; gap:10px;} }
+
+  /* ---------- main content ---------- */
+  main{padding:0;}
+  .hero{
+    background:
+      radial-gradient(circle at 82% 18%, rgba(200,150,62,0.16), transparent 45%),
+      var(--navy);
+    color:var(--cream);
+    padding:86px 56px 68px;
+    position:relative;
+    overflow:hidden;
+  }
+  @media (max-width:640px){ .hero{padding:64px 24px 48px;} }
+  .hero-anchor{
+    position:absolute; right:-40px; top:-40px;
+    width:340px; height:340px; opacity:.07;
+  }
+  .hero-kicker{
+    font-family:var(--sans); font-size:12px; letter-spacing:.16em;
+    color:var(--gold-soft); margin:0 0 18px;
+  }
+  .hero h1{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(34px,5vw,54px);
+    margin:0 0 10px; color:var(--cream);
+  }
+  .hero .sub{
+    font-family:var(--serif); font-style:italic;
+    color:var(--gold-soft); font-size:19px; margin:0 0 30px; max-width:520px;
+  }
+  .hero .coords{
+    font-family:var(--sans); font-size:12.5px; color:rgba(246,241,228,0.6);
+    display:flex; gap:22px; flex-wrap:wrap;
+  }
+  .hero .coords b{color:var(--cream);}
+
+  .content{ max-width:760px; margin:0 auto; padding:0 56px; }
+  @media (max-width:640px){ .content{padding:0 24px;} }
+
+  section.entry{ padding:70px 0 8px; border-top:1px solid var(--rule); }
+  section.entry:first-of-type{border-top:none;}
+  .entry-label{
+    font-family:var(--sans); font-size:11px; letter-spacing:.14em;
+    color:var(--gold); margin:0 0 8px;
+  }
+  .entry h2{
+    font-family:var(--serif); font-weight:400; font-size:30px;
+    margin:0 0 26px; color:var(--navy);
+  }
+  .entry h3{
+    font-family:var(--serif); font-weight:700; font-size:19px;
+    color:var(--navy); margin:34px 0 10px;
+  }
+  .entry h4{
+    font-family:var(--sans); font-weight:700; font-size:13.5px;
+    color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
+    margin:22px 0 10px;
+  }
+  .entry p{ margin:0 0 16px; max-width:66ch; color:var(--ink); }
+  .entry ul, .entry ol{ margin:0 0 18px; padding-left:0; max-width:66ch; }
+  .entry ul li, .entry ol li{
+    list-style:none; position:relative; padding-left:22px; margin-bottom:9px; color:var(--ink);
+  }
+  .entry ul li::before{
+    content:"⚓"; position:absolute; left:0; top:1px;
+    font-size:10px; color:var(--gold);
+  }
+  .entry ol{counter-reset:step;}
+  .entry ol li{counter-increment:step;}
+  .entry ol li::before{
+    content:counter(step)"."; position:absolute; left:0; top:0;
+    font-family:var(--sans); font-weight:700; font-size:13px; color:var(--gold);
+  }
+  .entry strong{color:var(--navy);}
+
+  blockquote{
+    font-family:var(--serif); font-style:italic; font-size:18px;
+    color:var(--navy); margin:26px 0; padding:4px 0 4px 22px;
+    border-left:3px solid var(--gold); max-width:60ch;
+  }
+
+  .callout{
+    background:var(--cream-deep);
+    border-left:3px solid var(--gold);
+    padding:16px 20px; margin:22px 0; max-width:64ch;
+    font-family:var(--sans); font-size:13.5px; color:var(--ink-soft);
+  }
+  .callout b{color:var(--navy); font-weight:700;}
+
+  .contact-line{
+    font-family:var(--sans); font-size:12.5px; color:var(--ink-soft);
+    font-style:italic; margin-top:30px;
+  }
+
+  table{ width:100%; border-collapse:collapse; margin:18px 0 26px; font-family:var(--sans); font-size:13.5px; }
+  thead th{
+    background:var(--navy); color:var(--cream); text-align:left;
+    padding:10px 14px; font-weight:700; letter-spacing:.02em;
+  }
+  tbody td{ padding:9px 14px; border-bottom:1px solid var(--rule); color:var(--ink); }
+  tbody tr:nth-child(even){ background:rgba(200,150,62,0.05); }
+
+  .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:26px 0 10px; }
+  @media (max-width:640px){ .pillars{grid-template-columns:1fr;} }
+  .pillar{ background:var(--cream-deep); padding:22px 20px; border-top:2px solid var(--gold); }
+  .pillar .num{ font-family:var(--serif); font-size:26px; color:var(--gold); }
+  .pillar h5{ font-family:var(--sans); font-size:14px; margin:6px 0 6px; color:var(--navy); }
+  .pillar p{ font-size:13.5px; margin:0; color:var(--ink-soft); }
+
+  .rope{
+    display:block; width:100%; height:22px; margin:56px 0 0;
+  }
+
+  .field-card{
+    border:1px solid var(--rule); padding:18px 20px; margin:18px 0;
+    background:#fffdf7;
+  }
+  .field-card .k{ font-family:var(--sans); font-size:11px; letter-spacing:.08em; color:var(--gold); text-transform:uppercase; }
+  .field-card .v{ margin-top:2px; margin-bottom:12px; }
+  .field-card .v:last-child{margin-bottom:0;}
+
+  footer{
+    background:var(--navy-deep); color:rgba(246,241,228,0.55);
+    font-family:var(--sans); font-size:12px;
+    padding:34px 56px 50px; margin-top:20px;
+  }
+  @media (max-width:640px){ footer{padding:30px 24px 40px;} }
+  footer a{ color:var(--gold-soft); text-decoration:none; }
+
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <button class="nav-toggle" id="navToggle" aria-expanded="false">⚓ &nbsp;Índice del cuaderno</button>
+
+  <nav class="nav" id="sideNav">
+    <div class="nav-brand">
+      <svg class="nav-anchor" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="21"/><path d="M5 14a7 7 0 0 0 14 0"/><line x1="5" y1="10" x2="19" y2="10"/></svg>
+      <span class="nav-brand-text"><span class="top">L'ÀNCORA · ROSES</span><span class="main">Cuaderno de Bitácora</span></span>
+    </div>
+    <ol>
+      <li><a href="#bienvenida">Bienvenid@ a bordo</a></li>
+      <li><a href="#filosofia">Nuestra filosofía</a></li>
+      <li><a href="#imagen">Imagen y presentación</a></li>
+      <li><a href="#comunicacion">Comunicación y actitud</a></li>
+      <li><a href="#sala">Servicio de sala</a></li>
+      <li><a href="#cocina">Cocina y control operativo</a></li>
+      <li><a href="#limpieza">Limpieza y mantenimiento</a></li>
+      <li><a href="#sostenibilidad">Sostenibilidad</a></li>
+      <li><a href="#normas">Normas internas</a></li>
+      <li><a href="#legalidad">Compromiso de legalidad</a></li>
+      <li><a href="#mensaje">Mensaje final</a></li>
+    </ol>
+    <div class="annex-label">Anexos</div>
+    <ol style="counter-reset:annex;">
+      <li><a href="#anexo1" style="padding-left:24px;">Retribución — Sala</a></li>
+      <li><a href="#anexo2" style="padding-left:24px;">Retribución — Cocina</a></li>
+      <li><a href="#anexo3" style="padding-left:24px;">Fichas técnicas</a></li>
+      <li><a href="#anexo4" style="padding-left:24px;">Registro de limpieza</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <svg class="hero-anchor" viewBox="0 0 24 24" fill="none" stroke="#f6f1e4" stroke-width="0.8"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="21"/><path d="M5 14a7 7 0 0 0 14 0"/><line x1="5" y1="10" x2="19" y2="10"/></svg>
+      <p class="hero-kicker">MANUAL DEL EQUIPO · TEMPORADA 2027</p>
+      <h1>Cuaderno de Bitácora de L'Àncora</h1>
+      <p class="sub">L'Àncora no es solo un restaurante, es una forma de trabajar y de vivir frente al mar.</p>
+      <div class="coords">
+        <span><b>Puerto base</b> — Roses, Costa Brava</span>
+        <span><b>Rumbo</b> — Avinguda de Rhode 62</span>
+        <span><b>Capitán</b> — Carlos Valero Quiles</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <section class="entry" id="bienvenida">
+        <p class="entry-label">Entrada 01</p>
+        <h2>⚓ Bienvenid@ a L'Àncora</h2>
+        <p>Este manual ha sido creado para que tengas a mano todo lo que necesitas saber para trabajar con confianza, disfrutar de lo que haces y ofrecer el mejor servicio posible.</p>
+        <p>Aquí encontrarás explicaciones, ejemplos y recomendaciones para que entiendas cómo funciona L'Àncora, cuál es nuestra forma de trabajar y qué esperamos de cada miembro del equipo.</p>
+        <p>No se trata de un documento rígido:</p>
+        <blockquote>Es una guía viva, que irá creciendo con el tiempo y con la aportación de todos. Cada idea, sugerencia o mejora que surja durante el trabajo puede incorporarse más adelante.</blockquote>
+      </section>
+
+      <section class="entry" id="filosofia">
+        <p class="entry-label">Entrada 02</p>
+        <h2>🌊 Nuestra filosofía</h2>
+        <p>L'Àncora es un restaurante familiar y mediterráneo. Nos une el amor por el mar, la cocina sencilla pero bien hecha y el trato cercano con nuestros clientes.</p>
+        <p>Queremos que cada persona que entra por la puerta —cliente o trabajador— sienta buen ambiente, profesionalidad y autenticidad. Nuestra forma de trabajar se basa en tres pilares:</p>
+        <div class="pillars">
+          <div class="pillar"><div class="num">1</div><h5>Respeto</h5><p>Hacia el cliente, el compañero y el entorno.</p></div>
+          <div class="pillar"><div class="num">2</div><h5>Calidad</h5><p>En el servicio, los productos y la presentación.</p></div>
+          <div class="pillar"><div class="num">3</div><h5>Cercanía</h5><p>La simpatía y la amabilidad son parte de nuestra identidad.</p></div>
+        </div>
+        <p>No buscamos ser el restaurante más grande de Roses, sino el lugar donde la gente más disfruta y mejor se siente:</p>
+        <blockquote>No seremos el mejor restaurante de Roses, pero casi seguro que sí el mejor lugar para disfrutar de Roses.</blockquote>
+        <h4>Cómo usar este manual</h4>
+        <p>Está dividido en entradas fáciles de consultar: imagen y presentación, comunicación y actitud, servicio de sala, cocina, limpieza, normas internas, sostenibilidad, y un mensaje final de equipo.</p>
+        <blockquote>La experiencia del cliente empieza con la actitud del equipo.</blockquote>
+      </section>
+
+      <section class="entry" id="imagen">
+        <p class="entry-label">Entrada 03</p>
+        <h2>👕 Imagen y presentación personal</h2>
+        <p>La primera impresión cuenta… y mucho. Tu imagen es la carta de presentación de L'Àncora. Antes de que el cliente pruebe un plato o escuche una palabra, ya ha formado una opinión visual. Cuidar tu aspecto y tu uniforme no es una cuestión de estética, sino de profesionalidad y respeto.</p>
+        <h3>Uniforme y aspecto general</h3>
+        <h4>1. Uniforme limpio y completo</h4>
+        <ul>
+          <li>En verano: polo o camiseta oficial de L'Àncora. En invierno: chaqueta de trabajo o prenda oficial de abrigo.</li>
+          <li>Si aún no dispones de pantalón del uniforme, vaquero azul largo, sin roturas, manchas ni desgaste.</li>
+          <li>Calzado cerrado, cómodo y antideslizante.</li>
+        </ul>
+        <h4>2. Higiene personal impecable</h4>
+        <ul>
+          <li>Cabello limpio y recogido si es largo.</li>
+          <li>Manos limpias y uñas cortas, sin esmaltes llamativos.</li>
+          <li>Perfume suave y en poca cantidad. Afeitado o barba arreglada.</li>
+        </ul>
+        <h4>3. Complementos</h4>
+        <ul>
+          <li>No se permiten relojes grandes, collares, pulseras o anillos que puedan interferir en el servicio.</li>
+          <li>Los piercings visibles deben ser discretos.</li>
+        </ul>
+        <blockquote>La buena presencia no es vanidad, es respeto por quien te mira.</blockquote>
+        <h3>Durante el turno</h3>
+        <ul>
+          <li>Si se ensucia el uniforme o el delantal, cámbialo o límpialo cuanto antes.</li>
+          <li>Evita tocarte el pelo, la cara o el móvil delante de los clientes.</li>
+          <li>Si necesitas beber agua, hazlo fuera de la vista del cliente y siempre en vaso.</li>
+        </ul>
+        <h3>Cuidado del material</h3>
+        <ul>
+          <li>Las prendas de trabajo son responsabilidad de cada empleado; lávalas con cuidado y no planches el logo directamente.</li>
+          <li>Si pierdes o deterioras una prenda, comunícalo al responsable para reponerla.</li>
+        </ul>
+        <blockquote>Cuidar tu imagen es cuidar la del equipo, y cuidar el uniforme es cuidar del planeta.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="comunicacion">
+        <p class="entry-label">Entrada 04</p>
+        <h2>🗣️ Comunicación, lenguaje y actitud con el cliente</h2>
+        <p>La forma de hablar y moverse también es parte del servicio. Cada gesto, cada palabra y cada mirada construyen la experiencia del cliente. Una buena atención no se trata de seguir un guion, sino de saber adaptarse con respeto y empatía.</p>
+        <h3>Lenguaje verbal</h3>
+        <ul>
+          <li>Habla con claridad y tono amable; un tono tranquilo transmite seguridad.</li>
+          <li>A las personas mayores, trátalas de usted — es un signo de respeto.</li>
+          <li>Evita expresiones demasiado informales (“¿Queréis algo más?”, “Vale”, “No sé”).</li>
+          <li>Si el cliente habla otro idioma, salúdalo en su lengua si puedes.</li>
+          <li>Evita diminutivos o apelativos personales (“guapa”, “chicos”, “cariño”…).</li>
+        </ul>
+        <div class="callout">Frases útiles: <b>“¿Les gustaría tomar algo más?”</b> · <b>“Por supuesto, enseguida se lo traigo.”</b> · <b>“Permítame un momento, voy a consultarlo con cocina.”</b></div>
+        <h3>Lenguaje no verbal</h3>
+        <ul>
+          <li>Postura erguida y natural; no te apoyes en la barra, sillas o paredes.</li>
+          <li>No cruces los brazos ni metas las manos en los bolsillos.</li>
+          <li>Sonríe con naturalidad y mantén contacto visual breve pero amable.</li>
+          <li>Si el cliente te busca con la mirada, responde aunque no sea tu mesa.</li>
+        </ul>
+        <blockquote>La elegancia no está en la ropa ni en las palabras, sino en la forma de comportarse.</blockquote>
+        <h3>Errores comunes que debemos evitar</h3>
+        <ul>
+          <li>Hablar entre compañeros en la sala o hacer corrillos.</li>
+          <li>Comer, beber o usar el móvil mientras hay clientes.</li>
+          <li>Ignorar una mesa porque “no es tuya”.</li>
+          <li>Mostrar cansancio, impaciencia o prisas.</li>
+        </ul>
+        <blockquote>Cada palabra deja huella: elige las que hagan sentir bien.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="sala">
+        <p class="entry-label">Entrada 05</p>
+        <h2>🍽️ Servicio de sala y atención durante la comida</h2>
+        <p>Cada cliente debe sentir que está en buenas manos desde el primer segundo. Todo comienza mucho antes de servir el primer plato: desde cómo abrimos la sala hasta cómo despedimos al cliente, cada momento importa.</p>
+        <h3>Antes del servicio</h3>
+        <ol>
+          <li>Mesas limpias, alineadas y completas (mantelitos, cubiertos, copas, servilletas, cartas).</li>
+          <li>Música encendida a volumen adecuado; puertas y paraguas abiertos.</li>
+          <li>TPV y móvil del restaurante cargados; cambio suficiente en caja.</li>
+          <li>Terraza playa acondicionada primero; 4 mesas en pérgola antes de las 12:00h, 2 en playa desde las 13:00h.</li>
+        </ol>
+        <blockquote>La apertura no es preparar el local, es preparar la actitud.</blockquote>
+        <h3>Recepción y comanda</h3>
+        <ul>
+          <li>Saluda siempre tú primero: “¡Buenos días! ¿Tienen reserva o prefieren que les busque una mesa?”</li>
+          <li>Acompaña a los clientes hasta la mesa; nunca los dejes decidir solos.</li>
+          <li>Ofrece bebida o aperitivo mientras miran la carta.</li>
+          <li>En arroces o pescados, informa siempre del tiempo de espera aproximado (30–35 min).</li>
+        </ul>
+        <blockquote>Una buena comanda empieza escuchando más que anotando.</blockquote>
+        <h3>Durante el servicio</h3>
+        <ul>
+          <li>Mesa limpia y despejada; copas nunca vacías sin ofrecer relleno.</li>
+          <li>Pasa la vista por tus mesas constantemente — no esperes a que te llamen.</li>
+          <li>Evita conversaciones personales o de trabajo en la sala.</li>
+        </ul>
+        <h3>Postres, cobro y despedida</h3>
+        <ul>
+          <li>Entrega la carta de postres con entusiasmo; ofrece café o digestivo después.</li>
+          <li>Solo cobra las mesas que hayas servido tú; confirma el método de pago con naturalidad.</li>
+          <li>Si el ticket medio supera 35€, chupito de cortesía y una invitación amable a dejar reseña.</li>
+        </ul>
+        <blockquote>La despedida es el último sabor que se lleva el cliente.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="cocina">
+        <p class="entry-label">Entrada 06</p>
+        <h2>👨‍🍳 Cocina y control operativo</h2>
+        <p>El corazón del restaurante late en la cocina. Aquí no solo se preparan platos: se construye la experiencia del cliente. Una cocina organizada, limpia y coordinada es garantía de calidad, eficiencia y seguridad.</p>
+        <h3>Organización diaria</h3>
+        <ul>
+          <li><strong>Comprobación de productos:</strong> qué falta, qué caduca, qué aprovechar ese día.</li>
+          <li><strong>Platos no disponibles:</strong> a la pizarra y comunicados a sala antes del servicio.</li>
+          <li><strong>Limpieza de superficies:</strong> encimeras despejadas desde el inicio del turno.</li>
+        </ul>
+        <blockquote>Una cocina ordenada cocina mejor, y además transmite calma al equipo.</blockquote>
+        <h3>Control de temperaturas — punto de control APPCC</h3>
+        <table>
+          <thead><tr><th>Equipo</th><th>Rango correcto</th></tr></thead>
+          <tbody>
+            <tr><td>Cámaras de refrigeración</td><td>0 °C – 5 °C</td></tr>
+            <tr><td>Congeladores</td><td>–18 °C o menos</td></tr>
+            <tr><td>Expositores o vitrinas frías</td><td>Máximo 4 °C</td></tr>
+            <tr><td>Baños maría o calentadores</td><td>Mínimo 65 °C</td></tr>
+          </tbody>
+        </table>
+        <p>Verifica al inicio del turno y anota las lecturas en el registro. Las cámaras de mayor riesgo cuentan con sensores conectados para control continuo. No introduzcas alimentos calientes directamente en cámara — especialmente fondos y fumets, uno de nuestros puntos críticos identificados.</p>
+        <h3>Recepción y stock</h3>
+        <ul>
+          <li>Revisa temperatura, fechas, estado e higiene de cada pedido antes de almacenar.</li>
+          <li>Regla FIFO: lo primero que entra es lo primero que se usa.</li>
+          <li>Escandallos revisados trimestralmente, ligados al objetivo de Food Cost &lt; 30% (Anexo II).</li>
+        </ul>
+        <h3>Durante el servicio</h3>
+        <ul>
+          <li>Orden sin gritos — el ruido genera errores.</li>
+          <li>Comunicación constante con sala si un plato se retrasa.</li>
+          <li>Los platos se revisan uno por uno antes de salir.</li>
+        </ul>
+        <blockquote>El pase no es una frontera, es un punto de encuentro.</blockquote>
+        <h3>Cierre de cocina</h3>
+        <ol>
+          <li>Limpia encimeras, fuegos, hornos y planchas.</li>
+          <li>Guarda la comida etiquetada y tapada.</li>
+          <li>Vacía cubos y limpia rejillas.</li>
+          <li>Apaga luces y maquinaria que no se use.</li>
+        </ol>
+        <blockquote>Cocina limpia, cocina lista.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="limpieza">
+        <p class="entry-label">Entrada 07</p>
+        <h2>🧽 Limpieza y mantenimiento</h2>
+        <p>El orden y la limpieza no son tareas: son una actitud. No se hace solo al final del turno — se mantiene durante todo el día, con la colaboración de todos.</p>
+        <blockquote>Si algo está sucio, se limpia. Si algo está fuera de sitio, se recoloca.</blockquote>
+        <h3>Checklist de cierre diario</h3>
+        <h4>Sala y terraza</h4>
+        <ul>
+          <li>Limpia y desinfecta mesas, sillas y superficies; posición original.</li>
+          <li>Paraguas plegados y asegurados; cartas guardadas.</li>
+        </ul>
+        <h4>Barra, TPV y maquinaria</h4>
+        <ul>
+          <li>TPV y móvil apagados y en carga.</li>
+          <li>Máquina de cócteles en modo limpieza; lavavajillas cargado, filtros limpios.</li>
+        </ul>
+        <h4>Reposición</h4>
+        <ul>
+          <li>Azúcar, cucharillas, refrescos y cervezas repuestos para el siguiente turno.</li>
+          <li>Fruta y perecederos en cámara o recipientes herméticos.</li>
+        </ul>
+        <blockquote>Un cierre bien hecho es el primer paso de una buena apertura.</blockquote>
+        <h3>Mantenimiento y averías</h3>
+        <p>Si detectas un fallo o rotura, comunícalo de inmediato al responsable. Registrar los pequeños desperfectos a tiempo evita gastos mayores y demuestra compromiso.</p>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="sostenibilidad">
+        <p class="entry-label">Entrada 08</p>
+        <h2>♻️ Sostenibilidad y compromiso ambiental</h2>
+        <p>En L'Àncora trabajamos por un futuro sostenible.</p>
+        <ul>
+          <li><strong>Movilidad sostenible:</strong> ven a pie, en bici o bus. Local bike friendly, con agua osmotizada.</li>
+          <li><strong>Separación de residuos</strong> en 5 fracciones.</li>
+          <li><strong>Producto local:</strong> gamba de Roses, vinos DO Empordà.</li>
+          <li><strong>Limpieza ecológica</strong> con sistema Ecofrog y productos a granel.</li>
+          <li><strong>Ahorro energético</strong> y control de consumos.</li>
+        </ul>
+        <blockquote>La sostenibilidad no es un trabajo extra, es la forma de hacer bien las cosas.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="normas">
+        <p class="entry-label">Entrada 09</p>
+        <h2>📱 Normas internas y conducta profesional</h2>
+        <p>Trabajar en equipo significa compartir unas mismas normas básicas de convivencia. No son restricciones: son lo que nos permite trabajar tranquilos, cuidarnos entre compañeros y dar siempre la mejor imagen a quien nos visita.</p>
+        <h3>Puntualidad, turnos y móvil</h3>
+        <ul>
+          <li>Preséntate uniformado y listo a la hora de inicio de turno, no en la puerta.</li>
+          <li>Los cambios de turno se comunican a dirección con antelación.</li>
+          <li>El móvil personal se queda guardado durante el servicio.</li>
+        </ul>
+        <h3>Discreción y convivencia</h3>
+        <ul>
+          <li>Lo que pasa en L'Àncora se queda en L'Àncora: no se comentan cifras ni incidencias internas fuera del equipo.</li>
+          <li>Trato respetuoso siempre; no se toleran comentarios discriminatorios.</li>
+          <li>No se consume alcohol durante el turno de trabajo.</li>
+        </ul>
+        <h3>Ausencias y faltas</h3>
+        <ul>
+          <li>Toda ausencia se justifica con al menos 24h de antelación siempre que sea posible.</li>
+          <li>Un “no show” conlleva la pérdida del bonus trimestral (ver Compromiso de Legalidad).</li>
+        </ul>
+        <blockquote>Las normas no están para vigilar, están para que todos sepamos a qué atenernos.</blockquote>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="legalidad">
+        <p class="entry-label">Entrada 10</p>
+        <h2>⚖️ Compromiso de legalidad y condiciones laborales</h2>
+        <p>En la hostelería de la Costa Brava, L'Àncora se diferencia por una obsesión: 100% legalidad. Aquí no existen los sobres, ni el dinero en “B”, ni las horas invisibles.</p>
+        <h3>Tu seguridad es lo primero</h3>
+        <ul>
+          <li><strong>Cotización total:</strong> se cobra por nómina hasta el último céntimo.</li>
+          <li><strong>Modelo 145:</strong> retenciones de IRPF reales, ajustadas a tu situación familiar.</li>
+        </ul>
+        <h3>Jornada y calendario</h3>
+        <ul>
+          <li>Temporada alta (junio–septiembre): más de 40h semanales, 1 día de libranza a la semana.</li>
+          <li>El exceso de horas se devuelve en invierno + “Plus de Mejora Voluntaria” en nómina.</li>
+          <li>Contrato de aproximadamente 10,5 meses.</li>
+        </ul>
+        <div class="callout"><b>A completar:</b> fechas exactas de la temporada 2027 (inicio de contratos, libranza semanal por puesto, cierre/reapertura).</div>
+        <h3>El sistema de bonus</h3>
+        <p>El 30% de la facturación bruta va a la “Hucha de Personal”. El superávit tras salarios y Seguridad Social es el Bonus Trimestral del equipo (10% se retiene como fondo de emergencia hasta 20.000€).</p>
+        <table>
+          <thead><tr><th>Departamento</th><th>% del superávit</th></tr></thead>
+          <tbody>
+            <tr><td>Sala</td><td>60%</td></tr>
+            <tr><td>Cocina</td><td>35%</td></tr>
+            <tr><td>Extras</td><td>5%</td></tr>
+          </tbody>
+        </table>
+        <h3>KPIs por departamento</h3>
+        <ul>
+          <li><strong>Cocina — Food Cost:</strong> por debajo del 30%. Reparto por partes: Jefe 1,5 · Cocinero 1,25 · Ayudante 1.</li>
+          <li><strong>Sala — Ratio x6:</strong> cada camarero factura, mínimo, 6 veces su coste salarial.</li>
+        </ul>
+        <h3>Disciplina y transparencia</h3>
+        <p>Ausencia no justificada o “no show” = pérdida total del bonus del trimestre. Cualquier duda sobre nómina u horas se resuelve por Dirección y se comunica vía Queralt (nuestra gestoría), siempre por escrito.</p>
+        <blockquote>En L'Àncora no se buscan “pasajeros”: se busca un equipo de profesionales que quiera ganar dinero legalmente y crecer en el mejor entorno de la Costa Brava.</blockquote>
+      </section>
+
+      <section class="entry" id="mensaje">
+        <p class="entry-label">Entrada 11</p>
+        <h2>💙 Mensaje final y compromiso de equipo</h2>
+        <p>Llegar hasta aquí significa que te has tomado en serio formar parte de L'Àncora, y eso ya dice mucho de ti. Gracias.</p>
+        <p>Este manual reúne cómo queremos trabajar, cómo queremos tratarnos y cómo queremos que se sienta quien nos visita. Pero un manual, por bien escrito que esté, no hace el ambiente de un restaurante: lo hace el equipo, día a día, turno a turno.</p>
+        <p>Recuerda que esto es una guía viva. Si durante la temporada encuentras una forma mejor de hacer algo, o algo que este cuaderno no contempla, dínoslo. Las mejores ideas de L'Àncora casi nunca nacen en un despacho: nacen en sala, en cocina, en el día a día.</p>
+        <blockquote>Cuidamos el restaurante, nos cuidamos entre nosotros y cuidamos a quien nos visita. Ese es el compromiso.</blockquote>
+        <p><strong>Gracias por ser parte de L'Àncora. Que tengamos una gran temporada.</strong></p>
+        <p style="font-style:italic;color:var(--ink-soft);">Carlos Valero Quiles</p>
+        <p class="contact-line">Contacta con nosotros en [correo electrónico de contacto]</p>
+      </section>
+
+      <section class="entry" id="anexo1">
+        <p class="entry-label">Anexo I</p>
+        <h2>Retribución variable — Equipo de sala</h2>
+        <div class="field-card">
+          <div class="k">Ratio de eficiencia</div>
+          <div class="v">Cada miembro del equipo de sala debe generar una venta bruta mínima de <strong>6 veces</strong> su coste salarial total (salario base + Seguridad Social a cargo de la empresa). El incumplimiento reiterado invalida el acceso al bonus trimestral.</div>
+          <div class="k">Cálculo del bonus</div>
+          <div class="v">El 60% del superávit de la Hucha de Personal se reparte equitativamente entre el equipo de sala presente en el periodo.</div>
+          <div class="k">Penalizaciones</div>
+          <div class="v">Falta de puntualidad o descuido del protocolo resta puntos en el reparto individual. Un “no show” conlleva la pérdida automática del 100% del bonus del trimestre en curso.</div>
+        </div>
+      </section>
+
+      <section class="entry" id="anexo2">
+        <p class="entry-label">Anexo II</p>
+        <h2>Retribución variable — Equipo de cocina</h2>
+        <div class="field-card">
+          <div class="k">Condición del Food Cost</div>
+          <div class="v">El acceso al bonus trimestral está condicionado a que el Food Cost real se mantenga por debajo del <strong>30%</strong>.</div>
+          <div class="k">Reparto por escala de responsabilidad</div>
+          <div class="v">
+            <table style="margin:8px 0 0;">
+              <thead><tr><th>Puesto</th><th>Partes</th></tr></thead>
+              <tbody>
+                <tr><td>Jefe de cocina</td><td>1,5</td></tr>
+                <tr><td>Segundo de cocina / cocinero</td><td>1,25</td></tr>
+                <tr><td>Ayudante / pica</td><td>1</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="k">Higiene y seguridad</div>
+          <div class="v">Cumplimiento estricto de las normas APPCC. El incumplimiento de los estándares de higiene es motivo de exclusión del reparto.</div>
+        </div>
+      </section>
+
+      <section class="entry" id="anexo3">
+        <p class="entry-label">Anexo III</p>
+        <h2>Fichas técnicas de producto</h2>
+        <p>Documento de referencia obligatorio para todo el personal de cocina — una ficha por producto de la carta.</p>
+        <div class="callout"><b>Pendiente:</b> depende de la carta 2027 cerrada. Plantilla lista para duplicar por plato en cuanto la carta esté definida.</div>
+        <div class="field-card">
+          <div class="k">Nombre</div><div class="v">[Nombre del producto]</div>
+          <div class="k">Ingredientes</div><div class="v">[Ingrediente 1, Ingrediente 2, Ingrediente 3…]</div>
+          <div class="k">Elaboración</div><div class="v">1. [Paso] · 2. [Paso] · 3. [Paso]</div>
+          <div class="k">Emplatado y alérgenos</div><div class="v">[Tipo de plato / decoración] · [Gluten] · [Lácteos] · [Huevo]</div>
+        </div>
+      </section>
+
+      <section class="entry" id="anexo4">
+        <p class="entry-label">Anexo IV</p>
+        <h2>Registro de limpieza de superficies</h2>
+        <p>A rellenar y firmar a diario; el encargado de local verifica y firma como supervisor al final de cada jornada.</p>
+        <h3>Cocina</h3>
+        <table>
+          <thead><tr><th>Superficie</th><th>Frecuencia</th></tr></thead>
+          <tbody>
+            <tr><td>Suelo, mesas de trabajo, fregadero</td><td>Diario</td></tr>
+            <tr><td>Maquinaria, cubos de basura, lavavajillas</td><td>Diario</td></tr>
+            <tr><td>Paredes, almacén, bandejas de horno</td><td>Semanal</td></tr>
+            <tr><td>Neveras (control APPCC)</td><td>Quincenal / registro diario de Tª</td></tr>
+          </tbody>
+        </table>
+        <h3>Salón</h3>
+        <table>
+          <thead><tr><th>Superficie</th><th>Frecuencia</th></tr></thead>
+          <tbody>
+            <tr><td>Suelo, mesas, vasos, lavavajillas</td><td>Diario</td></tr>
+            <tr><td>Aseo/WC, cristales, cafetera</td><td>Diario</td></tr>
+            <tr><td>Barriles/bodega, almacén de bebidas</td><td>Quincenal</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+    <footer>
+      <p>L'Àncora Bar Restaurant · Avinguda de Rhode 62, 17480 Roses, Girona · Documento de uso interno</p>
+      <p>Cuaderno de bitácora — temporada 2027 · <a href="#bienvenida">volver arriba ⚓</a></p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('sideNav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+
+  const links = document.querySelectorAll('.nav a');
+  const sections = document.querySelectorAll('section.entry');
+  const map = new Map();
+  links.forEach(a => map.set(a.getAttribute('href').slice(1), a));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = map.get(entry.target.id);
+      if(!link) return;
+      if(entry.isIntersecting){
+        links.forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+
+  links.forEach(a => a.addEventListener('click', () => {
+    if(window.innerWidth <= 900){ nav.classList.remove('open'); }
+  }));
+</script>
+
+</body>
+</html>
